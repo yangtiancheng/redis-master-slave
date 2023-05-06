@@ -1,7 +1,10 @@
 # redis-master-slave
 Redis Docker master-slave :1 master 、2 slaves
+
+
 1个master
 2个slave
+实现主从架构搭建
 
 通过docker容器的方式将其搭建起来
 配置文件和docker-compose.yml均已实验成功。
