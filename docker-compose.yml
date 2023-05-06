@@ -1,0 +1,68 @@
+version: '3'
+services:
+  redis-master:
+    hostname: redis-master
+    container_name: redis-master
+    image: redis:latest
+    ports:
+      - 16379:6379
+    restart: always
+    volumes:
+      - ./redis-master/data:/data
+      - ./redis-master/conf:/usr/local/etc/redis
+      - ./redis-master/logs:/logs
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
+    networks: 
+      app_net:
+        ipv4_address: 192.168.8.100
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-slave01:
+    hostname: redis-slave01
+    container_name: redis-slave01
+    image: redis:latest
+    ports:
+      - 16380:6379
+    restart: always
+    volumes:
+      - ./redis-slave01/data:/data
+      - ./redis-slave01/conf/redis.conf:/etc/redis/redis.conf
+      - ./redis-slave01/logs:/logs
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
+    networks: 
+      app_net:
+        ipv4_address: 192.168.8.101
+    command: redis-server /etc/redis/redis.conf
+  
+  redis-slave02:
+    hostname: redis-slave02
+    container_name: redis-slave02
+    image: redis:latest
+    ports:
+      - 16381:6379
+    restart: always
+    volumes:
+      - ./redis-slave02/data:/data
+      - ./redis-slave02/conf/redis.conf:/etc/redis/redis.conf
+      - ./redis-slave02/logs:/logs
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
+    networks: 
+      app_net:
+        ipv4_address: 192.168.8.102
+    command: redis-server /etc/redis/redis.conf
+
+networks:
+  app_net:
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.8.0/24
+        gateway: 192.168.8.1
